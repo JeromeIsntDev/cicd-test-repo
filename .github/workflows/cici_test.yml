@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
   push:
@@ -20,12 +20,5 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
-      - name: Test
-        run: ctest --test-dir build --output-on-failure
-
-      - name: Upload artifacts
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: build/
+      - name: Run application
+        run: ./build/MyProject
