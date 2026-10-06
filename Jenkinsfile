@@ -64,10 +64,14 @@ pipeline {
                     archiveArtifacts artifacts: 'build/*.tar.gz', fingerprint: true
                     node('') {
                         sh """
+                            echo "Looking for files in \${BUILD_DIR}:"
+                            ls -la \${BUILD_DIR}/
+                            FILE=\$(ls \${BUILD_DIR}/*.tar.gz | head -1)
+                            echo "Found: \$FILE"
                             curl -v -X POST \
                               "https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendDocument" \
                               -F "chat_id=\${TELEGRAM_CHAT_ID}" \
-                              -F "document=@\${BUILD_DIR}/your-package.tar.gz" \
+                              -F "document=@\${BUILD_DIR}/MyGame-1.0.0-Linux.tar.gz" \
                               -F "caption=✅ Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}"
                         """
                     }
