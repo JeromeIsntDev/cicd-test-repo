@@ -26,7 +26,7 @@ pipeline {
         stage('Configure (CMake)') {
             steps {
                 sh '''
-                    cmake -S . -B ${WORKSPACE}/${BUILD_DIR} \
+                    cmake -S . -B ${BUILD_DIR} \
                         -DCMAKE_BUILD_TYPE=Release \
                         -G "Unix Makefiles"
                 '''
@@ -36,9 +36,9 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    cmake --build ${WORKSPACE}/${BUILD_DIR} --parallel $(nproc)
-                    stash includes: 'build/**', name: 'build-output'
+                    cmake --build ${BUILD_DIR} --parallel $(nproc)
                 '''
+                stash includes: 'build/**', name: 'build-output'
             }
         }
 
@@ -60,8 +60,8 @@ pipeline {
 
         stage('Package') {
             steps {
+                unstash 'build-output'
                 sh '''
-                    unstash 'build-output'
                     sh 'cd ${BUILD_DIR} && cpack -G TGZ'
                 '''
             }
