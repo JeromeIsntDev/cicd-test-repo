@@ -72,8 +72,8 @@ pipeline {
             echo 'Build failed! Check the logs above.'
             node('')
                 withCredentials([
-                    string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_TOKEN'),
-                    string(credentialsId: 'telegram-chat-id',  variable: 'TELEGRAM_CHAT_ID')
+                    string(credentialsId: 'TELEGRAM_TOKEN', variable: 'TELEGRAM_TOKEN'),
+                    string(credentialsId: 'TELEGRAM_CHAT_ID',  variable: 'TELEGRAM_CHAT_ID')
                 ]) {
                     sh """
                         curl -v -X POST \
