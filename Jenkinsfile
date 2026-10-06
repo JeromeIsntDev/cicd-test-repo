@@ -69,6 +69,7 @@ pipeline {
                     // Archive the package so you can download it from Jenkins
                     archiveArtifacts artifacts: 'build/*.tar.gz', fingerprint: true
                     node('') {
+                        unstash 'build-output'
                         sh """
                             echo "Looking for files in \${BUILD_DIR}:"
                             ls -la \${WORKSPACE}/\${BUILD_DIR}/
