@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        BUILD_DIR = 'build'
+        BUILD_DIR = 'bin'
         TELEGRAM_TOKEN  = credentials('tgram_token')
         TELEGRAM_CHAT_ID = credentials('tgram_chat_id')
     }
