@@ -95,7 +95,7 @@ pipeline {
                     curl -v -X POST \
                       "https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendMessage" \
                       -d "chat_id=\${TELEGRAM_CHAT_ID}" \
-                      -d "text=Build FAILED: ${JOB_NAME} #${BUILD_NUMBER}"
+                      -d "text=Build FAILED: ${JOB_NAME} #${BUILD_NUMBER} from Project: ${GitHub project}."
                 """
             }
         }
