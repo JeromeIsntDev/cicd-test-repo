@@ -71,7 +71,7 @@ pipeline {
                     node('') {
                         sh """
                             echo "Looking for files in \${BUILD_DIR}:"
-                            ls -la \${BUILD_DIR}/
+                            ls -la \${WORKSPACE}/\${BUILD_DIR}/
                             FILE=\$(ls \${WORKSPACE}/\${BUILD_DIR}/*.tar.gz | head -1)
                             echo "Found: \$FILE"
                             curl -v -X POST \
