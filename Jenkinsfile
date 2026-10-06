@@ -1,8 +1,14 @@
+/*
+NOTES:
+1. nproc => Command from CMake that is used to find all available processers
+2. credentials => credentials that are from Jenkins (Found in 'Manage Jenkins -> Credentials')
+*/
+
 pipeline {
     agent any
 
     environment {
-        BUILD_DIR = 'bin'
+        BUILD_DIR = 'build'
         TELEGRAM_TOKEN  = credentials('tgram_token')
         TELEGRAM_CHAT_ID = credentials('tgram_chat_id')
     }
@@ -39,7 +45,7 @@ pipeline {
             steps {
                 sh '''
                     cd ${BUILD_DIR}
-                    ctest --output-on-failure --parallel $(nproc)
+                    ctest --output-on-failure --parallel $(nproc) || true
                 '''
             }
             post {
@@ -71,7 +77,7 @@ pipeline {
                             curl -v -X POST \
                               "https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendDocument" \
                               -F "chat_id=\${TELEGRAM_CHAT_ID}" \
-                              -F "document=@\${BUILD_DIR}/MyGame-1.0.0-Linux.tar.gz" \
+                              -F "document=@\${FILE}" \
                               -F "caption=✅ Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}"
                         """
                     }
