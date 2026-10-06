@@ -45,8 +45,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh """
-                    cd ${WORKSPACE}/${BUILD_DIR} \
-                    ctest --output-on-failure --parallel $(nproc) || true
+                    cd ${WORKSPACE}/${BUILD_DIR} && ctest --output-on-failure --parallel \$(nproc) || true
                 """
             }
             post {
