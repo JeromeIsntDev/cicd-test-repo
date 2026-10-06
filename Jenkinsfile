@@ -44,10 +44,10 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh '''
-                    cd ${BUILD_DIR}
+                sh """
+                    cd ${WORKSPACE}/${BUILD_DIR}
                     ctest --output-on-failure --parallel $(nproc) || true
-                '''
+                """
             }
             post {
                 always {
@@ -61,9 +61,9 @@ pipeline {
         stage('Package') {
             steps {
                 unstash 'build-output'
-                sh '''
-                    sh 'cd ${BUILD_DIR} && cpack -G TGZ'
-                '''
+                sh """
+                    cd ${WORKSPACE}/${BUILD_DIR} && cpack -G TGZ
+                """
             }
             post {
                 success {
