@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         BUILD_DIR = 'build'
+        TELEGRAM_TOKEN  = credentials('TELEGRAM_TOKON')
+        TELEGRAM_CHAT_ID = credentials('TELEGRAM_CHAT_ID')
     }
 
     stages {
@@ -68,6 +70,12 @@ pipeline {
     post {
         failure {
             echo 'Build failed! Check the logs above.'
+            sh """
+                curl -s -X POST \
+                  https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendMessage \
+                  -d chat_id=\${TELEGRAM_CHAT_ID} \
+                  -d text="❌ Build FAILED: \${JOB_NAME} #\${BUILD_NUMBER}%0AView: \${BUILD_URL}"
+            """
         }
         success {
             echo 'Pipeline complete — package is ready.'
