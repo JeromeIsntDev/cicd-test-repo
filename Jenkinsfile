@@ -37,6 +37,7 @@ pipeline {
             steps {
                 sh '''
                     cmake --build ${BUILD_DIR} --parallel $(nproc)
+                    stash includes: 'build/**', name: 'build-output'
                 '''
             }
         }
@@ -60,8 +61,8 @@ pipeline {
         stage('Package') {
             steps {
                 sh '''
-                    cd ${BUILD_DIR}
-                    cpack -G TGZ
+                    unstash 'build-output'
+                    sh 'cd ${BUILD_DIR} && cpack -G TGZ'
                 '''
             }
             post {
@@ -72,7 +73,7 @@ pipeline {
                         sh """
                             echo "Looking for files in \${BUILD_DIR}:"
                             ls -la \${BUILD_DIR}/
-                            FILE=\$(ls \${BUILD_DIR}/*.tar.gz | head -1)
+                            FILE=\$(ls \${WORKSPACE}/\${BUILD_DIR}/*.tar.gz | head -1)
                             echo "Found: \$FILE"
                             curl -v -X POST \
                               "https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendDocument" \
