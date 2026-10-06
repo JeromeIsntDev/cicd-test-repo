@@ -70,12 +70,13 @@ pipeline {
     post {
         failure {
             echo 'Build failed! Check the logs above.'
-            sh """
-                curl -s -X POST \
-                  https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendMessage \
-                  -d chat_id=\${TELEGRAM_CHAT_ID} \
-                  -d text="❌ Build FAILED: \${JOB_NAME} #\${BUILD_NUMBER}%0AView: \${BUILD_URL}"
-            """
+            node('')
+                sh """
+                    curl -s -X POST \
+                      https://api.telegram.org/bot\${TELEGRAM_TOKEN}/sendMessage \
+                      -d chat_id=\${TELEGRAM_CHAT_ID} \
+                      -d text="❌ Build FAILED: \${JOB_NAME} #\${BUILD_NUMBER}%0AView: \${BUILD_URL}"
+                """
         }
         success {
             echo 'Pipeline complete — package is ready.'
